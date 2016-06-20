@@ -34,6 +34,7 @@ import ioio.lib.util.android.IOIOActivity;
  * <p/>
  * There should be no need to modify this class. Modify Pilot instead.
  * Version 160614A drivedirectPWM added.
+ * Version 160619A Cleaned up and added Roomba stuck check
  *
  * @author Erik Colban
  */
