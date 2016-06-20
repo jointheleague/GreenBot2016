@@ -33,12 +33,13 @@ import ioio.lib.util.android.IOIOActivity;
  * <p/>
  * <p/>
  * There should be no need to modify this class. Modify Pilot instead.
+ * Version 160614A drivedirectPWM added.
  *
  * @author Erik Colban
  */
 public class Dashboard extends IOIOActivity
-        implements TextToSpeech.OnInitListener, SensorEventListener {
-
+        implements  SensorEventListener
+{
     /**
      * Text view that contains all logged messages
      */
@@ -48,11 +49,7 @@ public class Dashboard extends IOIOActivity
      * A Pilot instance
      */
     private Pilot kalina;
-    /**
-     * TTS stuff
-     */
-    protected static final int MY_DATA_CHECK_CODE = 33;
-    private TextToSpeech mTts;
+
     /**
      * Compass stuff
      */
@@ -72,7 +69,8 @@ public class Dashboard extends IOIOActivity
 
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         /*
          * Since the android device is carried by the iRobot, we want to
@@ -83,9 +81,9 @@ public class Dashboard extends IOIOActivity
         // getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.main);
 
-        Intent checkIntent = new Intent();
-        checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-        startActivityForResult(checkIntent, MY_DATA_CHECK_CODE);
+//        Intent checkIntent = new Intent();
+//        checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+//        startActivityForResult(checkIntent, MY_DATA_CHECK_CODE);
 
         // Compass stuff
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -108,8 +106,10 @@ public class Dashboard extends IOIOActivity
     }
 
     @Override
-    public void onPause() {
-        if (kalina != null) {
+    public void onPause()
+    {
+        if (kalina != null)
+        {
             log(getString(R.string.pausing));
         }
         sensorManager.unregisterListener(this, sensorAccelerometer);
@@ -118,7 +118,8 @@ public class Dashboard extends IOIOActivity
     }
 
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
 
         sensorManager.registerListener(this, sensorAccelerometer,
                 SensorManager.SENSOR_DELAY_NORMAL);
@@ -128,39 +129,26 @@ public class Dashboard extends IOIOActivity
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == MY_DATA_CHECK_CODE) {
-            if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
-                // success, create the TTS instance
-                mTts = new TextToSpeech(this, this);
-            } else {
-                // missing data, install it
-                Intent installIntent = new Intent();
-                installIntent.setAction(TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
-                startActivity(installIntent);
-            }
-        }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
     }
 
-    public void onInit(int arg0) {
-    }
-
-    public void speak(String stuffToSay) {
-        mTts.setLanguage(Locale.US);
-        if (!mTts.isSpeaking()) {
-            mTts.speak(stuffToSay, TextToSpeech.QUEUE_FLUSH, null);
-        }
+    public void onInit(int arg0)
+    {
     }
 
     @Override
-    public void onAccuracyChanged(Sensor arg0, int arg1) {
+    public void onAccuracyChanged(Sensor arg0, int arg1)
+    {
         // TODO Auto-generated method stub
 
     }
 
     @Override
-    public void onSensorChanged(SensorEvent event) {
-        switch (event.sensor.getType()) {
+    public void onSensorChanged(SensorEvent event)
+    {
+        switch (event.sensor.getType())
+        {
             case Sensor.TYPE_ACCELEROMETER:
                 System.arraycopy(event.values, 0, valuesAccelerometer, 0, 3);
                 break;
@@ -172,9 +160,11 @@ public class Dashboard extends IOIOActivity
         boolean success = SensorManager.getRotationMatrix(matrixR, matrixI,
                 valuesAccelerometer, valuesMagneticField);
 
-        if (success) {
+        if (success)
+        {
             SensorManager.getOrientation(matrixR, matrixValues);
-            synchronized (this) {
+            synchronized (this)
+            {
                 azimuth = Math.toDegrees(matrixValues[0]);
                 pitch = Math.toDegrees(matrixValues[1]);
                 roll = Math.toDegrees(matrixValues[2]);
@@ -188,7 +178,8 @@ public class Dashboard extends IOIOActivity
      *
      * @return the azimuth
      */
-    public synchronized double getAzimuth() {
+    public synchronized double getAzimuth()
+    {
         return azimuth;
     }
 
@@ -197,7 +188,8 @@ public class Dashboard extends IOIOActivity
      *
      * @return the pitch
      */
-    public synchronized double getPitch() {
+    public synchronized double getPitch()
+    {
         return pitch;
     }
 
@@ -206,16 +198,20 @@ public class Dashboard extends IOIOActivity
      *
      * @return the roll
      */
-    public synchronized double getRoll() {
+    public synchronized double getRoll()
+    {
         return roll;
     }
 
     @Override
-    public IOIOLooper createIOIOLooper() {
-        return new IOIOLooper() {
+    public IOIOLooper createIOIOLooper()
+    {
+        return new IOIOLooper()
+        {
 
             public void setup(IOIO ioio) throws ConnectionLostException,
-                    InterruptedException {
+                    InterruptedException
+            {
                 // When the setup() method is called the IOIO is connected.
                 log(getString(R.string.ioio_connected));
 
@@ -233,18 +229,21 @@ public class Dashboard extends IOIOActivity
                 kalina.initialize();
             }
 
-            public void loop() throws ConnectionLostException, InterruptedException {
+            public void loop() throws ConnectionLostException, InterruptedException
+            {
                 // This thread hogs the CPU and prevents other threads from running (bad scheduler?)
                 // The following sleep is needed to allow access to other threads.
                 SystemClock.sleep(10L);
                 kalina.loop();
             }
 
-            public void disconnected() {
+            public void disconnected()
+            {
                 log(getString(R.string.ioio_disconnected));
             }
 
-            public void incompatible() {
+            public void incompatible()
+            {
             }
         };
     }
@@ -254,10 +253,13 @@ public class Dashboard extends IOIOActivity
      *
      * @param msg the message to write
      */
-    public void log(final String msg) {
-        runOnUiThread(new Runnable() {
+    public void log(final String msg)
+    {
+        runOnUiThread(new Runnable()
+        {
 
-            public void run() {
+            public void run()
+            {
                 mText.append(msg);
                 mText.append("\n");
                 scroller.smoothScrollTo(0, mText.getBottom());
@@ -266,12 +268,14 @@ public class Dashboard extends IOIOActivity
     }
 
     @Override
-    public void onStart() {
+    public void onStart()
+    {
         super.onStart();
     }
 
     @Override
-    public void onStop() {
+    public void onStop()
+    {
         super.onStop();
     }
 }
