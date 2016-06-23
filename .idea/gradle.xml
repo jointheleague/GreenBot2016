@@ -9,7 +9,6 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/GreenBot2016" />
-            <option value="$PROJECT_DIR$/iOIOLib" />
             <option value="$PROJECT_DIR$/iOIOiRobot2" />
           </set>
         </option>
@@ -17,7 +16,6 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/GreenBot2016" />
-            <option value="$PROJECT_DIR$/iOIOLib" />
             <option value="$PROJECT_DIR$/iOIOiRobot2" />
           </set>
         </option>
