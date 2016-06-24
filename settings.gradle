@@ -1,3 +1,2 @@
-include ':iOIOLib'
 include ':iOIOiRobot2'
 include ':GreenBot2016'
