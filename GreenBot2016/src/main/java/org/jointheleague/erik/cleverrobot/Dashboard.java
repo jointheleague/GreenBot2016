@@ -34,7 +34,7 @@ import ioio.lib.util.android.IOIOActivity;
  * <p/>
  * There should be no need to modify this class. Modify Pilot instead.
  * Version 160614A drivedirectPWM added.
- * Version 160619A Cleaned up and added Roomba stuck check
+ * Version 160627A Added battery charge method by Vic
  *
  * @author Erik Colban
  */
@@ -81,10 +81,6 @@ public class Dashboard extends IOIOActivity
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         // getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.main);
-
-//        Intent checkIntent = new Intent();
-//        checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-//        startActivityForResult(checkIntent, MY_DATA_CHECK_CODE);
 
         // Compass stuff
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
